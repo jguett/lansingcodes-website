@@ -1,6 +1,7 @@
 import LogoSmall from '@/components/logos/LogoSmall'
 import { formatReadableDateTime } from '@/lib/utils/formatDateTime'
 import { cleanEventDescription } from '@/lib/utils/cleanEventDescription'
+import { boldMarkdownToHtml } from '@/lib/utils/boldMarkdownToHtml'
 import type { Event } from '@/lib/firestore/events'
 import type { Group } from '@/lib/firestore/groups'
 
@@ -12,7 +13,7 @@ interface CardEventProps {
 export default function CardEvent({ event, group }: CardEventProps) {
   const venue = event.venue || null
   const address = event.address || null
-  const safeDescription = cleanEventDescription(event.description || '')
+  const safeDescription = boldMarkdownToHtml(cleanEventDescription(event.description || ''))
 
   return (
     <article className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 mb-8 md:mx-4 h-full max-w-xs bg-white shadow-md">
@@ -54,9 +55,10 @@ export default function CardEvent({ event, group }: CardEventProps) {
               )}
             </div>
           )}
-          <p className="bg-transparent overflow-x-hidden overflow-y-hidden">
-            {safeDescription}
-          </p>
+          <p
+            className="bg-transparent overflow-x-hidden overflow-y-hidden"
+            dangerouslySetInnerHTML={{ __html: safeDescription }}
+          />
         </div>
       </div>
     </article>
