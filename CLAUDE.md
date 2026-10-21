@@ -33,6 +33,7 @@ Copy `.env.local.example` to `.env.local` and fill in:
 
 | Variable | Description |
 |----------|-------------|
+| `FIREBASE_SERVICE_ACCOUNT` | Optional: full service account JSON. If set, used instead of the three vars below (`FIREBASE_PROJECT_ID` still overrides its `project_id`) |
 | `FIREBASE_PROJECT_ID` | Firebase project ID (e.g. `lansing-codes`) |
 | `FIREBASE_CLIENT_EMAIL` | Service account email from Firebase Console → Service accounts |
 | `FIREBASE_PRIVATE_KEY` | Private key from the service account JSON (include the `-----BEGIN/END-----` lines, use `\n` for newlines) |
