@@ -1,0 +1,84 @@
+# Promotes a commit from main to production.
+#
+# Merging to main deploys to staging (Netlify: lansingcodes-staging).
+# Running this workflow fast-forwards the `production` branch to a commit on
+# main, which Netlify (lansingcodes-www) builds and deploys to www.lansing.codes.
+#
+# Who can deploy is controlled by the `production` GitHub Environment:
+# Settings → Environments → production → Required reviewers, with
+# Deployment branches limited to `main`.
+name: Deploy to production
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit on main to deploy (leave blank for the latest main)
+        required: false
+        default: ''
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    name: Promote main to production
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://www.lansing.codes
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fast-forward production
+        env:
+          INPUT_SHA: ${{ inputs.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ -n "$INPUT_SHA" ]; then
+            if ! [[ "$INPUT_SHA" =~ ^[0-9a-f]{7,40}$ ]]; then
+              echo "::error::'$INPUT_SHA' is not a commit SHA"
+              exit 1
+            fi
+            sha=$(git rev-parse --verify "$INPUT_SHA^{commit}")
+          else
+            sha=$(git rev-parse origin/main)
+          fi
+
+          if ! git merge-base --is-ancestor "$sha" origin/main; then
+            echo "::error::$sha is not on main"
+            exit 1
+          fi
+
+          # Only move production forward; roll back by publishing an older
+          # deploy in Netlify instead of rewriting the branch.
+          if git rev-parse --verify -q origin/production > /dev/null; then
+            current=$(git rev-parse origin/production)
+            if [ "$current" = "$sha" ]; then
+              echo "production is already at $sha"
+              exit 0
+            fi
+            if ! git merge-base --is-ancestor "$current" "$sha"; then
+              echo "::error::$sha is behind production ($current); not a fast-forward"
+              exit 1
+            fi
+          fi
+
+          git push origin "$sha:refs/heads/production"
+
+          {
+            echo "### Promoted to production"
+            echo
+            echo "Commit: \`$sha\`"
+            echo
+            git log --oneline "${current:-$sha~1}..$sha" 2>/dev/null || true
+          } >> "$GITHUB_STEP_SUMMARY"

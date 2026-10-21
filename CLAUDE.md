@@ -26,6 +26,9 @@ agent-browser install  # Download Chromium
 - **Data**: Firebase Firestore, read server-side only via Firebase Admin SDK — no client-side Firebase
 - **Rendering**: SSR on every request (`export const dynamic = 'force-dynamic'` on home page)
 - **Deployment**: Netlify via `@netlify/plugin-nextjs`
+  - Merges to `main` deploy to staging (Netlify project `lansingcodes-staging`, Firebase `lansing-codes-staging`); PRs get deploy previews there
+  - Production (`lansingcodes-www`, www.lansing.codes, Firebase `lansing-codes`) builds the `production` branch, which only the **Deploy to production** GitHub Action (`.github/workflows/deploy-production.yml`) moves forward. It's gated by the `production` GitHub Environment's required reviewers
+  - Roll back by publishing an older deploy in Netlify, not by rewriting `production`
 
 ## Environment Variables
 
