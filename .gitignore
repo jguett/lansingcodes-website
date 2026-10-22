@@ -49,3 +49,9 @@ next-env.d.ts
 
 # local data store (DATA_STORE=local)
 /.data/
+
+# firebase emulator (DATA_STORE=emulator)
+/.emulator-data/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
