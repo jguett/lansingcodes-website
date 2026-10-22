@@ -43,5 +43,9 @@ next-env.d.ts
 
 # dogfood testing
 /dogfood-output
+
 # netlify
 .netlify
+
+# local data store (DATA_STORE=local)
+/.data/

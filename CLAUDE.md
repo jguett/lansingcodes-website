@@ -23,7 +23,7 @@ agent-browser install  # Download Chromium
 
 - **Framework**: Next.js 16 App Router, React 19, TypeScript
 - **Styling**: Tailwind CSS v4 — theme configured via CSS variables in `app/globals.css` (not a JS config file)
-- **Data**: Firebase Firestore, read server-side only via Firebase Admin SDK — no client-side Firebase
+- **Data**: Firebase Firestore, read server-side only via Firebase Admin SDK — no client-side Firebase. All access goes through `getStore()` in `lib/store/`; `DATA_STORE=local` swaps in a JSON-file store for local dev
 - **Rendering**: SSR on every request (`export const dynamic = 'force-dynamic'` on home page)
 - **Deployment**: Netlify via `@netlify/plugin-nextjs`
   - Merges to `main` deploy to staging (Netlify project `lansingcodes-staging`, Firebase `lansing-codes-staging`); PRs get deploy previews there
@@ -42,6 +42,7 @@ Copy `.env.local.example` to `.env.local` and fill in:
 | `FIREBASE_PRIVATE_KEY` | Private key from the service account JSON (include the `-----BEGIN/END-----` lines, use `\n` for newlines) |
 | `SYNC_SECRET` | Bearer token protecting `/api/sync/*` routes |
 | `NEXT_PUBLIC_BASE_URL` | Public URL of the site (e.g. `https://www.lansing.codes`) |
+| `DATA_STORE` | Optional. Set to `local` to use JSON files in `.data/` instead of Firestore (dev only; Firebase vars not needed). Populate with `npm run sync` while `npm run dev` is running |
 
 ## Key Files
 
@@ -51,6 +52,7 @@ Copy `.env.local.example` to `.env.local` and fill in:
 | `app/layout.tsx` | Root layout — Navigation, Footer, metadata, Google Fonts |
 | `app/globals.css` | Tailwind v4 theme + global CSS + custom utility classes |
 | `lib/firebase/admin.ts` | Firebase Admin singleton (server only) |
+| `lib/store/` | `getStore()` — data store abstraction: Firestore, or local JSON files when `DATA_STORE=local` |
 | `lib/firestore/events.ts` | `getUpcomingEvents()` — next 4 weeks from Firestore |
 | `lib/firestore/groups.ts` | `getAllGroups()` |
 | `lib/firestore/sponsors.ts` | `getAllSponsors()` |
