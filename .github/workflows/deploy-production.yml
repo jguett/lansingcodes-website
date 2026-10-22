@@ -1,84 +1,62 @@
-# Promotes a commit from main to production.
+# Deploys main to production on demand.
 #
-# Merging to main deploys to staging (Netlify: lansingcodes-staging).
-# Running this workflow fast-forwards the `production` branch to a commit on
-# main, which Netlify (lansingcodes-www) builds and deploys to www.lansing.codes.
+# Merging to main deploys to staging (Netlify: lansingcodes-staging, linked to
+# this repo). Production (Netlify: lansingcodes-www, www.lansing.codes) is not
+# linked to a repo; running this workflow builds main with the Netlify CLI,
+# using lansingcodes-www's environment variables, and publishes it there.
 #
 # Who can deploy is controlled by the `production` GitHub Environment:
 # Settings → Environments → production → Required reviewers, with
-# Deployment branches limited to `main`.
+# Deployment branches limited to `main`. The environment holds the secrets
+# NETLIFY_AUTH_TOKEN and NETLIFY_PRODUCTION_SITE_ID.
 name: Deploy to production
 
 on:
   workflow_dispatch:
-    inputs:
-      sha:
-        description: Commit on main to deploy (leave blank for the latest main)
-        required: false
-        default: ''
 
 concurrency:
   group: deploy-production
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  promote:
-    name: Promote main to production
+  deploy:
+    name: Deploy main to production
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: production
       url: https://www.lansing.codes
     steps:
-      - name: Check out repository
+      - name: Check out main
         uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
+          node-version: 22
+          cache: npm
 
-      - name: Fast-forward production
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build and deploy to Netlify
         env:
-          INPUT_SHA: ${{ inputs.sha }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_PRODUCTION_SITE_ID }}
         run: |
-          set -euo pipefail
+          # deploy runs the build (netlify.toml) before uploading
+          npx --yes netlify-cli@27.11.2 deploy \
+            --prod \
+            --context production \
+            --message "Deploy ${GITHUB_SHA::7} from main (run ${GITHUB_RUN_ID})"
 
-          if [ -n "$INPUT_SHA" ]; then
-            if ! [[ "$INPUT_SHA" =~ ^[0-9a-f]{7,40}$ ]]; then
-              echo "::error::'$INPUT_SHA' is not a commit SHA"
-              exit 1
-            fi
-            sha=$(git rev-parse --verify "$INPUT_SHA^{commit}")
-          else
-            sha=$(git rev-parse origin/main)
-          fi
-
-          if ! git merge-base --is-ancestor "$sha" origin/main; then
-            echo "::error::$sha is not on main"
-            exit 1
-          fi
-
-          # Only move production forward; roll back by publishing an older
-          # deploy in Netlify instead of rewriting the branch.
-          if git rev-parse --verify -q origin/production > /dev/null; then
-            current=$(git rev-parse origin/production)
-            if [ "$current" = "$sha" ]; then
-              echo "production is already at $sha"
-              exit 0
-            fi
-            if ! git merge-base --is-ancestor "$current" "$sha"; then
-              echo "::error::$sha is behind production ($current); not a fast-forward"
-              exit 1
-            fi
-          fi
-
-          git push origin "$sha:refs/heads/production"
-
+      - name: Summarize
+        run: |
           {
-            echo "### Promoted to production"
+            echo "### Deployed to production"
             echo
-            echo "Commit: \`$sha\`"
-            echo
-            git log --oneline "${current:-$sha~1}..$sha" 2>/dev/null || true
+            echo "Commit: \`${GITHUB_SHA}\`"
           } >> "$GITHUB_STEP_SUMMARY"

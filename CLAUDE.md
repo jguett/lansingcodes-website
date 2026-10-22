@@ -27,8 +27,8 @@ agent-browser install  # Download Chromium
 - **Rendering**: SSR on every request (`export const dynamic = 'force-dynamic'` on home page)
 - **Deployment**: Netlify via `@netlify/plugin-nextjs`
   - Merges to `main` deploy to staging (Netlify project `lansingcodes-staging`, Firebase `lansing-codes-staging`); PRs get deploy previews there
-  - Production (`lansingcodes-www`, www.lansing.codes, Firebase `lansing-codes`) builds the `production` branch, which only the **Deploy to production** GitHub Action (`.github/workflows/deploy-production.yml`) moves forward. It's gated by the `production` GitHub Environment's required reviewers
-  - Roll back by publishing an older deploy in Netlify, not by rewriting `production`
+  - Production (`lansingcodes-www`, www.lansing.codes, Firebase `lansing-codes`) is not linked to the repo. The **Deploy to production** GitHub Action (`.github/workflows/deploy-production.yml`) builds `main` with the Netlify CLI and publishes it there on demand. It's gated by the `production` GitHub Environment's required reviewers, which also holds `NETLIFY_AUTH_TOKEN` and `NETLIFY_PRODUCTION_SITE_ID`
+  - Roll back by publishing an older deploy in Netlify
 
 ## Environment Variables
 
