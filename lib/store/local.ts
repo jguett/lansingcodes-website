@@ -1,10 +1,12 @@
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
+import { randomUUID } from 'node:crypto'
+import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import type { DataStore, StoredDoc } from './types'
 
 // One JSON file per collection, so parallel syncs of different
 // collections (e.g. /api/sync/all) never overwrite each other.
 const DATA_DIR = path.join(process.cwd(), '.data')
+const pendingWrites = new Map<string, Promise<void>>()
 
 function fileFor(collection: string) {
   return path.join(DATA_DIR, `${collection}.json`)
@@ -42,11 +44,29 @@ export const localStore: DataStore = {
     return docs
   },
 
-  // Write to a temp file then rename, so a crash never leaves a partial file.
+  // Queue writes to the same file and atomically publish each complete snapshot.
+  // Different collections can still sync in parallel.
   async replaceCollection(collection, docs) {
-    await mkdir(DATA_DIR, { recursive: true })
-    const file = fileFor(collection)
-    await writeFile(`${file}.tmp`, JSON.stringify(docs, null, 2))
-    await rename(`${file}.tmp`, file)
+    const previous = pendingWrites.get(collection) ?? Promise.resolve()
+    // A failed replacement still rejects its caller, but must not block the queue.
+    const replacement = previous.catch(() => {}).then(async () => {
+      await mkdir(DATA_DIR, { recursive: true })
+      const file = fileFor(collection)
+      const tempFile = `${file}.${randomUUID()}.tmp`
+      try {
+        await writeFile(tempFile, JSON.stringify(docs, null, 2))
+        await rename(tempFile, file)
+      } finally {
+        await rm(tempFile, { force: true }).catch(() => {
+          // Cleanup is best effort; preserve the original write or rename error.
+        })
+      }
+    })
+    pendingWrites.set(collection, replacement)
+    try {
+      await replacement
+    } finally {
+      if (pendingWrites.get(collection) === replacement) pendingWrites.delete(collection)
+    }
   },
 }
