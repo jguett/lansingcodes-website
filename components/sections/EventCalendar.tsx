@@ -9,7 +9,7 @@ import {
   format as formatDate,
 } from 'date-fns'
 import chunk from 'lodash/chunk'
-import { simplifiedName } from '@/lib/utils/simplifiedName'
+import { sameCommunityEvent } from '@/lib/utils/simplifiedName'
 import CalendarEvent, { type EventEntry } from './CalendarEvent'
 import maxCalendarWeeks from '@/config/max-calendar-weeks'
 import type { Event } from '@/lib/firestore/events'
@@ -61,8 +61,7 @@ function eventsOnDay(day: Date, events: Event[]): EventEntry[] {
         const first = candidate.events[0]
         return (
           ['single', 'community'].includes(candidate.type) &&
-          first.startTime === event.startTime &&
-          simplifiedName(event.name) === simplifiedName(first.name)
+          sameCommunityEvent(first, event)
         )
       })
       if (communityEvent) {
