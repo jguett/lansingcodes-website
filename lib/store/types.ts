@@ -11,4 +11,6 @@ export interface DataStore {
   listDocs<T>(collection: string, opts?: ListOptions): Promise<(T & { id: string })[]>
   // Full-replace: write every doc, then remove any doc not in `docs`
   replaceCollection(collection: string, docs: Record<string, StoredDoc>): Promise<void>
+  // Serialize event syncs and fetch all feeds before replacing any events.
+  syncEvents(loadEvents: () => Promise<Record<string, StoredDoc>>): Promise<void>
 }
