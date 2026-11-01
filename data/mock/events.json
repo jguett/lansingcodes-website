@@ -1,0 +1,167 @@
+[
+  {
+    "id": "welcome",
+    "group": "lansing_codes",
+    "name": "Welcome to Lansing Codes",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/welcome",
+    "dayOffset": 0,
+    "time": "23:30",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "devops-intro",
+    "group": "devops",
+    "name": "DevOps Deployment Lab",
+    "description": "**Bring a question.** We will walk through a small project together and compare notes. Learn more at https://example.com/mock-events. This long description is sample content for checking layout, links, and wrapping across screen sizes.",
+    "url": "https://example.com/mock-events/devops-intro",
+    "dayOffset": 1,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "ai-intro",
+    "group": "ai",
+    "name": "Practical AI Workshop",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/ai-intro",
+    "dayOffset": 1,
+    "time": "19:00",
+    "venue": "",
+    "address": ""
+  },
+  {
+    "id": "dotnet-clinic",
+    "group": "dotnet",
+    "name": ".NET Debugging Clinic",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/dotnet-clinic",
+    "dayOffset": 2,
+    "time": "18:30",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "wordpress-night",
+    "group": "wordpress",
+    "name": "WordPress Build Night",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/wordpress-night",
+    "dayOffset": 3,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "security-night",
+    "group": "misec",
+    "name": "Application Security Night",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/security-night",
+    "dayOffset": 4,
+    "time": "18:30",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "makers-night",
+    "group": "lansing_codes",
+    "name": "Community Maker Night",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/makers-night",
+    "dayOffset": 5,
+    "time": "17:30",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "shared-a",
+    "group": "lansing_codes",
+    "name": "Shared Workshop",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/shared-a",
+    "dayOffset": 6,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "shared-b",
+    "group": "devops",
+    "name": "Shared Workshop",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/shared-b",
+    "dayOffset": 6,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "database-demo",
+    "group": "glass",
+    "name": "Database Demo",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/database-demo",
+    "dayOffset": 8,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "startup-chat",
+    "group": "startupgrind",
+    "name": "Startup Founder Chat",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/startup-chat",
+    "dayOffset": 9,
+    "time": "17:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "ai-tools",
+    "group": "ai",
+    "name": "AI Tools Office Hours",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/ai-tools",
+    "dayOffset": 10,
+    "time": "16:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "frontend-lab",
+    "group": "lit",
+    "name": "Frontend Lab",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/frontend-lab",
+    "dayOffset": 12,
+    "time": "18:30",
+    "venue": "",
+    "address": ""
+  },
+  {
+    "id": "community-social",
+    "group": "lansing_codes",
+    "name": "Community Social",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/community-social",
+    "dayOffset": 16,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  },
+  {
+    "id": "tech-talk",
+    "group": "catech",
+    "name": "Technology Talk",
+    "description": "Sample event for local development. This is not a real Lansing Codes event.",
+    "url": "https://example.com/mock-events/tech-talk",
+    "dayOffset": 21,
+    "time": "18:00",
+    "venue": "Sample venue",
+    "address": "Lansing, MI"
+  }
+]

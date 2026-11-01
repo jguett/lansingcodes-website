@@ -30,8 +30,30 @@ project is exclusively for bug reports and feature requests.
 
 ## Getting started
 
-If you want to run this website and make changes to it on your computer, some
-initial setup is required.
+### Quick start with mock data
+
+For UI, styling, and copy work, a fresh checkout needs no database, Docker, or
+credentials:
+
+```sh
+git clone https://github.com/lansingcodes/website.git
+cd website
+npm ci
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). When no Firebase credentials
+or `DATA_STORE` setting are present, development mode shows bundled sample
+groups, sponsors, and 15 events whose dates follow the current Lansing calendar.
+The page labels these as mock data. Sync routes return HTTP 409 in this mode.
+Set `DATA_STORE=local` to use writable JSON files, `DATA_STORE=emulator` for the
+Firestore emulator, or configure Firebase credentials for a real project.
+Mock mode cannot run in production.
+
+### Full local stack
+
+The following setup is for contributors who need to test sync or database
+behavior.
 
 ### Required software
 
@@ -201,16 +223,15 @@ This project requires Node.js 20 or later. Check your version with
 `node --version`. If you use nvm, run `nvm install 20` and `nvm use 20`.
 
 **Site looks empty after starting dev server**
-You need to sync data first. Run `npm run sync` in a second terminal while the
-dev server is running (see [Syncing data](#syncing-data) above).
+If you selected `DATA_STORE=local`, run `npm run sync` in a second terminal
+while the dev server is running (see [Syncing data](#syncing-data) above).
 
 ## Alternative Storage Options for Local Development
 
-By default the app reads and writes your own Firebase project's Firestore
-database. For local development you can skip Firebase setup by setting
-`DATA_STORE` in `.env.local` to one of the options below. With either option the
-`FIREBASE_*` variables are not needed, but `SYNC_SECRET` is still required to
-populate data.
+With no Firebase configuration, development mode defaults to bundled mock data.
+To sync real events into your local environment, set `DATA_STORE` in
+`.env.local` to one of the options below. With either option the `FIREBASE_*`
+variables are not needed, but `SYNC_SECRET` is still required to populate data.
 
 `DATA_STORE` is for development only. If it's set in production, the app throws
 an error when it reads data. Restart the dev server after changing it, and remove it (or comment

@@ -10,6 +10,11 @@ npm run build    # Production build (also runs TypeScript type check)
 npm run lint     # ESLint
 ```
 
+A fresh development checkout with no `.env.local` uses bundled mock groups,
+sponsors, and relative-date events. `DATA_STORE=mock` selects it explicitly.
+Mock mode is read-only: sync routes return 409. Production refuses mock mode and
+requires Firebase credentials.
+
 ## Firebase Emulator (optional)
 
 Runs the real Firestore code path locally against project `demo-lansing-codes` (config in `firebase.json` / `.firebaserc`).
@@ -36,7 +41,7 @@ agent-browser install  # Download Chromium
 
 - **Framework**: Next.js 16 App Router, React 19, TypeScript
 - **Styling**: Tailwind CSS v4 — theme configured via CSS variables in `app/globals.css` (not a JS config file)
-- **Data**: Firebase Firestore, read server-side only via Firebase Admin SDK — no client-side Firebase. All access goes through `getStore()` in `lib/store/`; `DATA_STORE=local` swaps in a JSON-file store and `DATA_STORE=emulator` uses the local Firestore emulator (dev only)
+- **Data**: Firebase Firestore, read server-side only via Firebase Admin SDK — no client-side Firebase. All access goes through `getStore()` in `lib/store/`; development without Firebase configuration uses the read-only mock store, `DATA_STORE=local` swaps in a JSON-file store, and `DATA_STORE=emulator` uses the local Firestore emulator
 - **Rendering**: SSR on every request (`export const dynamic = 'force-dynamic'` on home page)
 - **Deployment**: Netlify via `@netlify/plugin-nextjs`
   - Merges to `main` deploy to staging (Netlify project `lansingcodes-staging`, Firebase `lansing-codes-staging`); PRs get deploy previews there
