@@ -47,7 +47,7 @@ export default function LogoSmall({
   }
 
   if (iconSet === 'lansing-codes') {
-    return <LansingCodesIcon className={`w-8 h-8 ${className}`} />
+    return <LansingCodesIcon className={`w-8 h-8 shrink-0 ${className}`} />
   }
 
   return (
