@@ -26,3 +26,5 @@ jobs:
         run: npm ci
       - name: Lint source
         run: npm run lint
+      - name: Build website
+        run: npm run build
