@@ -231,3 +231,44 @@ test('parallel replacements of different collections retain both snapshots', asy
   assert.deepEqual(await readSnapshot('sponsors'), sponsors)
   assert.deepEqual((await fs.readdir(dataDir)).sort(), ['groups.json', 'sponsors.json'])
 })
+
+test('a failed event feed preserves the previous snapshot and does not block a later sync', async (t) => {
+  const { store, readSnapshot } = await createStore(t)
+  const old = { old: { name: 'Old event' } }
+  const latest = { latest: { name: 'Latest event' } }
+  await store.replaceCollection('events', old)
+
+  await assert.rejects(
+    store.syncEvents(async () => { throw new Error('Meetup unavailable') }),
+    /Meetup unavailable/,
+  )
+  assert.deepEqual(await readSnapshot('events'), old)
+  await store.syncEvents(async () => latest)
+  assert.deepEqual(await readSnapshot('events'), latest)
+})
+
+test('overlapping event syncs fetch and publish in start order', { timeout: 5000 }, async (t) => {
+  const started = deferred()
+  const release = deferred()
+  const { store, readSnapshot } = await createStore(t)
+  const calls = []
+  const first = store.syncEvents(async () => {
+    calls.push('first fetch')
+    started.resolve()
+    await release.promise
+    return { old: { name: 'Older feed' } }
+  })
+  await started.promise
+  const second = store.syncEvents(async () => {
+    calls.push('second fetch')
+    return { latest: { name: 'Newer feed' } }
+  })
+  try {
+    assert.deepEqual(calls, ['first fetch'])
+  } finally {
+    release.resolve()
+    await Promise.all([first, second])
+  }
+  assert.deepEqual(calls, ['first fetch', 'second fetch'])
+  assert.deepEqual(await readSnapshot('events'), { latest: { name: 'Newer feed' } })
+})

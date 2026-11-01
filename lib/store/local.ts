@@ -7,6 +7,7 @@ import type { DataStore, StoredDoc } from './types'
 // collections (e.g. /api/sync/all) never overwrite each other.
 const DATA_DIR = path.join(process.cwd(), '.data')
 const pendingWrites = new Map<string, Promise<void>>()
+let pendingEventSync: Promise<void> = Promise.resolve()
 
 function fileFor(collection: string) {
   return path.join(DATA_DIR, `${collection}.json`)
@@ -68,5 +69,16 @@ export const localStore: DataStore = {
     } finally {
       if (pendingWrites.get(collection) === replacement) pendingWrites.delete(collection)
     }
+  },
+
+  async syncEvents(loadEvents) {
+    // Queue the entire fetch-and-replace operation, so a slow older feed
+    // cannot publish after a newer sync. A failed feed leaves the old file.
+    const sync = pendingEventSync.catch(() => {}).then(async () => {
+      const events = await loadEvents()
+      await localStore.replaceCollection('events', events)
+    })
+    pendingEventSync = sync
+    await sync
   },
 }
