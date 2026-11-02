@@ -53,6 +53,13 @@ body {
   font-family: var(--font-sans);
 }
 
+.lc-logo-icon {
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: url('/icon-tall-square-fixed-300-transparent.png') center / contain no-repeat;
+  mask: url('/icon-tall-square-fixed-300-transparent.png') center / contain no-repeat;
+}
+
 a {
   color: var(--color-blue-dark);
 }

@@ -68,7 +68,7 @@ export default function Welcome({ events, groups, now }: WelcomeProps) {
           <SectionHeading white heading="Next Event" />
           {nextEvent ? (
             <div className="text-left font-normal">
-              <div className="flex flex-nowrap items-center mb-2 min-h-12">
+              <div className="flex flex-nowrap items-start mb-2 min-h-12">
                 {nextGroup && (
                   <LogoSmall
                     iconSet={nextGroup.iconSet}
@@ -77,7 +77,7 @@ export default function Welcome({ events, groups, now }: WelcomeProps) {
                     className="mr-3"
                   />
                 )}
-                <h3 className="font-bold">{nextEvent.name}</h3>
+                <h3 className="min-w-0 flex-1 break-words text-balance leading-snug font-bold">{nextEvent.name}</h3>
               </div>
               <p className="flex flex-wrap justify-between text-sm mb-4 mt-0">
                 <span className="mb-1 mr-2">

@@ -74,15 +74,6 @@ export default function RootLayout({
         <link
           rel="preload"
           as="style"
-          href="https://cdn.jsdelivr.net/npm/@lansingcodes/webfont@latest/font-lansing-codes.css"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/@lansingcodes/webfont@latest/font-lansing-codes.css"
-        />
-        <link
-          rel="preload"
-          as="style"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-mfizz/2.4.1/font-mfizz.min.css"
         />
         <link
