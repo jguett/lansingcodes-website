@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { IconProp } from '@fortawesome/fontawesome-svg-core'
+import LansingCodesIcon from './LansingCodesIcon'
 
 interface LogoSmallProps {
   iconSet?: string
@@ -46,7 +47,7 @@ export default function LogoSmall({
   }
 
   if (iconSet === 'lansing-codes') {
-    return <span className={`${iconName} inline text-3xl px-1 ${className}`} />
+    return <LansingCodesIcon className={`w-8 h-8 shrink-0 ${className}`} />
   }
 
   return (

@@ -53,6 +53,13 @@ body {
   font-family: var(--font-sans);
 }
 
+.lc-logo-icon {
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: url('/icon-tall-square-fixed-300-transparent.png') center / contain no-repeat;
+  mask: url('/icon-tall-square-fixed-300-transparent.png') center / contain no-repeat;
+}
+
 a {
   color: var(--color-blue-dark);
 }
@@ -162,6 +169,19 @@ p {
   background-position: center top;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+/* Keep event card titles readable above the global link rules. */
+.lc-event-title,
+.lc-event-title:hover,
+.lc-event-title:focus {
+  color: white;
+  background-color: transparent;
+}
+
+.lc-event-title:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
 }
 
 /* Event description links */

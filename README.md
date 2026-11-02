@@ -122,6 +122,12 @@ newlines.
 
 #### Other variables
 
+For newsletter subscription testing, set `MAILCHIMP_API_KEY` to a key from
+your own Mailchimp account and `MAILCHIMP_LIST_ID` to that account's audience
+ID. If `MAILCHIMP_LIST_ID` is unset, the subscribe route uses the existing
+Lansing Codes audience ID. Keep test credentials in local or deployment
+environment variables; do not commit them.
+
 | Variable | Description |
 |----------|-------------|
 | `SYNC_SECRET` | A random string used to protect the `/api/sync/*` routes. Generate one with `openssl rand -base64 32`. |
@@ -141,24 +147,15 @@ site. The page will reload automatically as you edit files.
 
 ### Syncing data
 
-The site reads event, group, and sponsor data from Firebase Firestore. Your
-Firestore database starts empty, so you need to populate it. With the dev
-server running, open a second terminal and run:
+Groups and sponsors are read directly from `data/groups.json` and `data/sponsors.json`.
+Events are synced from Meetup iCal feeds into Firebase Firestore. To populate
+events for local development, run:
 
 ```sh
 npm run sync
 ```
 
-This scrapes Meetup iCal feeds and writes events, groups, and sponsors to your
-Firestore database. Refresh the browser and you should see the full site.
-
-You can also sync individual collections:
-
-```sh
-npm run sync:events    # just events
-npm run sync:groups    # just groups
-npm run sync:sponsors  # just sponsors
-```
+(or `npm run sync:events`). Refresh the browser and you should see the full site.
 
 These scripts automatically read `SYNC_SECRET` from your `.env.local` file.
 
@@ -228,8 +225,7 @@ The simplest option, with no extra software. Data is stored as JSON files in
    ```
 
 2. Start the dev server with `npm run dev`.
-3. In a second terminal, run `npm run sync` to populate events, groups, and
-   sponsors.
+3. In a second terminal, run `npm run sync` to populate events.
 
 To start fresh, stop the dev server, delete the `.data/` folder, and sync again.
 

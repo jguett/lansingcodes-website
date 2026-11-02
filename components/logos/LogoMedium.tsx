@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type { IconProp } from '@fortawesome/fontawesome-svg-core'
+import LansingCodesIcon from './LansingCodesIcon'
 
 interface LogoMediumProps {
   iconSet?: string
@@ -49,9 +50,7 @@ export default function LogoMedium({
   }
 
   if (iconSet === 'lansing-codes') {
-    return (
-      <span className={`${iconName} text-6xl h-24 fa fa-4x pt-3`} />
-    )
+    return <LansingCodesIcon className="w-24 h-24" />
   }
 
   return (

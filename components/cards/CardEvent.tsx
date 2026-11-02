@@ -1,9 +1,8 @@
 import LogoSmall from '@/components/logos/LogoSmall'
 import { formatReadableDateTime } from '@/lib/utils/formatDateTime'
 import { cleanEventDescription } from '@/lib/utils/cleanEventDescription'
+import type { Event, Group } from '@/lib/types'
 import { boldMarkdownToHtml } from '@/lib/utils/boldMarkdownToHtml'
-import type { Event } from '@/lib/firestore/events'
-import type { Group } from '@/lib/firestore/groups'
 
 interface CardEventProps {
   event: Event
@@ -18,7 +17,7 @@ export default function CardEvent({ event, group }: CardEventProps) {
   return (
     <article className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 mb-8 md:mx-4 h-full max-w-xs bg-white shadow-md">
       <header className="overflow-hidden relative bg-blue-800 text-white p-4 shadow">
-        <div className="flex flex-nowrap items-center font-normal mb-2 min-h-12">
+        <div className="flex flex-nowrap items-start font-normal mb-2 min-h-12">
           {group && (
             <LogoSmall
               iconSet={group.iconSet}
@@ -26,12 +25,12 @@ export default function CardEvent({ event, group }: CardEventProps) {
               iconText={group.iconText}
             />
           )}
-          <h3 className="text-white m-0 ml-3">
+          <h3 className="min-w-0 flex-1 break-words text-balance leading-snug text-white m-0 ml-3">
             <a
               href={event.url}
               rel="noreferrer noopener"
               target="_blank"
-              className="text-white no-underline hover:text-white hover:underline focus:text-white focus:underline focus:bg-transparent"
+              className="lc-event-title no-underline hover:underline focus:underline"
             >
               {event.name}
             </a>
