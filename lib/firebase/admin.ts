@@ -33,11 +33,15 @@ export function getFirebaseAdmin(): App {
   // DATA_STORE=emulator: the Admin SDK routes Firestore calls to
   // FIRESTORE_EMULATOR_HOST, and no credentials are needed.
   if (process.env.DATA_STORE === 'emulator') {
-    process.env.FIRESTORE_EMULATOR_HOST ??= '127.0.0.1:8080'
+    process.env.FIRESTORE_EMULATOR_HOST ??= '127.0.0.1:8085'
     return initializeApp({ projectId: EMULATOR_PROJECT_ID }, APP_NAME)
   }
 
   const { projectId, clientEmail, privateKey } = getCredentials()
+
+  if (process.env.FIRESTORE_EMULATOR_HOST && projectId) {
+    return initializeApp({ projectId }, APP_NAME)
+  }
 
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error(

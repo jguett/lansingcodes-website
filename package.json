@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test",
+    "test": "tsx --test test/*.test.mjs test/*.test.ts",
+    "test:stack": "bash scripts/run-sync-safety-smoke.sh",
     "sync": "node scripts/sync.mjs all",
     "sync:all": "node scripts/sync.mjs all",
     "sync:events": "node scripts/sync.mjs events",
@@ -44,6 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
