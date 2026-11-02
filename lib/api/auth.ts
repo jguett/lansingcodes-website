@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { timingSafeEqual } from 'crypto'
 
 export function checkSyncSecret(request: NextRequest): boolean {
@@ -8,7 +8,9 @@ export function checkSyncSecret(request: NextRequest): boolean {
   if (!auth) return false
 
   const expected = `Bearer ${secret}`
-  if (auth.length !== expected.length) return false
+  const actualBytes = Buffer.from(auth)
+  const expectedBytes = Buffer.from(expected)
+  if (actualBytes.length !== expectedBytes.length) return false
 
-  return timingSafeEqual(Buffer.from(auth), Buffer.from(expected))
+  return timingSafeEqual(actualBytes, expectedBytes)
 }
